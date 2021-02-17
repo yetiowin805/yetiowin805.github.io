@@ -1,4 +1,4 @@
-var screenX = 500, screenY = 500;
+var screenX = window.screen.width*0.9, screenY = window.screen.height*0.8;
 var start_game = {x:screenX/2 , y: screenY/4, w: 250, h: 50, name: "Start Game"};
 var rules_button = {x:screenX/2 , y: screenY/4+60, w: 250, h: 50, name: "Rules"};
 var begin_round = {x:screenX/2 , y: screenY/4, w: 300, h: 50, name: "Begin Round"};
@@ -14,7 +14,7 @@ frozen_dice = [];
 
 function setup() {
   createCanvas(screenX, screenY);
-    
+
 }
 
 function draw() {
@@ -83,7 +83,7 @@ function distance(x1,y1,x2,y2){
     return sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
 }
 
-function in_button(button){ 
+function in_button(button){
     if (abs(mouseX-button.x)>button.w/2){
         return false;
     }
