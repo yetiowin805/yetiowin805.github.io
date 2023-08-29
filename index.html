@@ -19,22 +19,58 @@
     </style>
 </head>
 <body>
-
+    
     <div id="data"></div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+    
+            let globalRows; // to store fetched rows
+            let sortDirection = {
+                'Rank': true,
+                'Name': true,
+                'Federation': true,
+                'BirthYear': true,
+                'Sex': true,
+                'Rating': true,
+                'RD': true
+            };
+            let currentSort = {
+                column: null,
+                direction: null // 'asc' or 'desc'
+            };
+
+    
             async function loadTableData() {
                 let response = await fetch('https://raw.githubusercontent.com/yetiowin805/fide-glicko/master/top_rating_lists/Standard/open.txt');
                 let data = await response.text();
-                let rows = data.split('\n').slice(1); // Skipping the header
+                globalRows = data.split('\n').slice(1).filter(row => /^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)$/.test(row));  // Only keep rows that match the format
 
+                displayTable(globalRows);
+            }
+
+            function getHeaderWithSortArrow(columnName) {
+                if (currentSort.column === columnName) {
+                    return currentSort.direction === 'asc' ? columnName + ' ↓' : columnName + ' ↑';
+                }
+                return columnName;
+            }
+
+    
+            function displayTable(rows) {
                 let tableHTML = '<table border="1">';
-                tableHTML += '<tr><th>Rank</th><th>Name</th><th>Federation</th><th>BirthYear</th><th>Sex</th><th>Rating</th><th>RD</th></tr>';
-
+                tableHTML += '<tr>';
+                tableHTML += `<th onclick="sortTable('Rank')">${getHeaderWithSortArrow('Rank')}</th>`;
+                tableHTML += `<th onclick="sortTable('Name')">${getHeaderWithSortArrow('Name')}</th>`;
+                tableHTML += `<th onclick="sortTable('Federation')">${getHeaderWithSortArrow('Federation')}</th>`;
+                tableHTML += `<th onclick="sortTable('BirthYear')">${getHeaderWithSortArrow('BirthYear')}</th>`;
+                tableHTML += `<th onclick="sortTable('Sex')">${getHeaderWithSortArrow('Sex')}</th>`;
+                tableHTML += `<th onclick="sortTable('Rating')">${getHeaderWithSortArrow('Rating')}</th>`;
+                tableHTML += `<th onclick="sortTable('RD')">${getHeaderWithSortArrow('RD')}</th>`;
+                tableHTML += '</tr>';
+    
                 rows.forEach(row => {
                     let columns = row.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)$/);
-
                     if (columns) {
                         tableHTML += `<tr>
                         <td>${columns[1]}</td>
@@ -47,13 +83,54 @@
                         </tr>`;
                     }
                 });
-
+    
                 tableHTML += '</table>';
-
+    
                 document.getElementById('data').innerHTML = tableHTML;
             }
+    
+            window.sortTable = function(column) { // Add to global scope
+                let rows = [...globalRows];
 
+                let columnIndices = {
+                    'Rank': 1,
+                    'Name': 2,
+                    'Federation': 3,
+                    'BirthYear': 4,
+                    'Sex': 5,
+                    'Rating': 6,
+                    'RD': 7
+                };
+
+                rows.sort((a, b) => {
+                    let columnsA = a.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)$/);
+                    let columnsB = b.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)$/);
+
+                    let aValue = columnsA[columnIndices[column]];
+                    let bValue = columnsB[columnIndices[column]];
+
+                    // Check for numeric values and convert if necessary
+                    if (!isNaN(aValue)) {
+                        aValue = parseFloat(aValue);
+                        bValue = parseFloat(bValue);
+                        return sortDirection[column] ? aValue - bValue : bValue - aValue;
+                    } else {
+                        return sortDirection[column] ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+                    }
+                });
+                // Toggle the sort direction or set to 'asc' if a new column is clicked
+                if (currentSort.column === column) {
+                    currentSort.direction = (currentSort.direction === 'asc') ? 'desc' : 'asc';
+                } else {
+                    currentSort.column = column;
+                    currentSort.direction = 'asc';
+                }
+
+                sortDirection[column] = !sortDirection[column];
+                displayTable(rows);
+            }
             loadTableData();
+    
         });
     </script>
 
