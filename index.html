@@ -19,78 +19,43 @@
     </style>
 </head>
 <body>
-    <table id="rankingTable">
-        <thead>
-            <tr>
-                <th>Rank</th>
-                <th>Name</th>
-                <th>Federation</th>
-                <th>Birth Year</th>
-                <th>Sex</th>
-                <th>Rating</th>
-                <th>RD</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+
+    <div id="data"></div>
 
     <script>
-        // Fetch the text file from the GitHub repository
-        // fetch('https://raw.githubusercontent.com/yetiowin805/fide-glicko/master/top_rating_lists/Standard/open.txt')
-        //     .then(response => response.text())
-        //     .then(data => {
-        //         const lines = data.trim().split("\n");
-        //         const tableBody = document.querySelector("#rankingTable tbody");
+        document.addEventListener("DOMContentLoaded", function() {
+            async function loadTableData() {
+                let response = await fetch('https://raw.githubusercontent.com/yetiowin805/fide-glicko/master/top_rating_lists/Standard/open.txt');
+                let data = await response.text();
+                let rows = data.split('\n').slice(1); // Skipping the header
 
-        //         // Skip the header line
-        //         for (let i = 1; i < lines.length; i++) {
-        //             const columns = lines[i].split("\t");
-        //             const row = document.createElement("tr");
-        //             columns.forEach(column => {
-        //                 const cell = document.createElement("td");
-        //                 cell.textContent = column.trim();
-        //                 row.appendChild(cell);
-        //             });
-        //             tableBody.appendChild(row);
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.error("Error fetching or processing data:", error);
-        //     });
+                let tableHTML = '<table border="1">';
+                tableHTML += '<tr><th>Rank</th><th>Name</th><th>Federation</th><th>BirthYear</th><th>Sex</th><th>Rating</th><th>RD</th></tr>';
 
-        async function loadTableData() {
-        let response = await fetch('https://raw.githubusercontent.com/yetiowin805/fide-glicko/master/top_rating_lists/Standard/open.txt');
-        let data = await response.text();
-        let rows = data.split('\n').slice(1); // Skipping the header
-        console.log(rows);
-        
-        let tableHTML = '<table border="1">';
-        tableHTML += '<tr><th>Rank</th><th>Name</th><th>Federation</th><th>BirthYear</th><th>Sex</th><th>Rating</th><th>RD</th></tr>';
-        
-        rows.forEach(row => {
-          let columns = row.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)$/);
-          
-          if (columns) {
-            tableHTML += `<tr>
-              <td>${columns[1]}</td>
-              <td>${columns[2]}</td>
-              <td>${columns[3]}</td>
-              <td>${columns[4]}</td>
-              <td>${columns[5]}</td>
-              <td>${columns[6]}</td>
-              <td>${columns[7]}</td>
-            </tr>`;
-          }
+                rows.forEach(row => {
+                    let columns = row.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)$/);
+
+                    if (columns) {
+                        tableHTML += `<tr>
+                        <td>${columns[1]}</td>
+                        <td>${columns[2]}</td>
+                        <td>${columns[3]}</td>
+                        <td>${columns[4]}</td>
+                        <td>${columns[5]}</td>
+                        <td>${columns[6]}</td>
+                        <td>${columns[7]}</td>
+                        </tr>`;
+                    }
+                });
+
+                tableHTML += '</table>';
+
+                document.getElementById('data').innerHTML = tableHTML;
+            }
+
+            loadTableData();
         });
-        
-        tableHTML += '</table>';
-        
-        document.getElementById('data').innerHTML = tableHTML;
-      }
-
-      loadTableData();
-
-
     </script>
+
 </body>
 </html>
