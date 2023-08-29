@@ -62,17 +62,15 @@
         let response = await fetch('https://raw.githubusercontent.com/yetiowin805/fide-glicko/master/top_rating_lists/Standard/open.txt');
         let data = await response.text();
         let rows = data.split('\n').slice(1); // Skipping the header
+        console.log(rows);
         
         let tableHTML = '<table border="1">';
         tableHTML += '<tr><th>Rank</th><th>Name</th><th>Federation</th><th>BirthYear</th><th>Sex</th><th>Rating</th><th>RD</th></tr>';
         
         rows.forEach(row => {
           let columns = row.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)$/);
-          if (!columns) {
-            console.error("Failed to parse:", row);
-          } else {
-              // Rest of your processing logic
-              if (columns) {
+          
+          if (columns) {
             tableHTML += `<tr>
               <td>${columns[1]}</td>
               <td>${columns[2]}</td>
@@ -83,9 +81,6 @@
               <td>${columns[7]}</td>
             </tr>`;
           }
-          }
-          
-          
         });
         
         tableHTML += '</table>';
