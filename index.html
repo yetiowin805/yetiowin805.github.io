@@ -1,23 +1,63 @@
 <!DOCTYPE html>
-<html lang="">
-
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dice Decathlon</title>
-  <style>
-    body {
-      padding: 0;
-      margin: 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Player Rankings</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
 </head>
-
 <body>
-  <main>
-        <script src=https://CDN.JSDelivr.net/p5.js/latest/mainfile></script>
-        <script src=dice_decathlon.js></script>
-  </main>
-</body>
+    <table id="rankingTable">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Federation</th>
+                <th>Birth Year</th>
+                <th>Sex</th>
+                <th>Rating</th>
+                <th>RD</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
+    <script>
+        // Fetch the text file from the GitHub repository
+        fetch('https://raw.githubusercontent.com/yetiowin805/fide-glicko/master/top_rating_lists/Standard/open.txt')
+            .then(response => response.text())
+            .then(data => {
+                const lines = data.trim().split("\n");
+                const tableBody = document.querySelector("#rankingTable tbody");
+
+                // Skip the header line
+                for (let i = 1; i < lines.length; i++) {
+                    const columns = lines[i].split("\t");
+                    const row = document.createElement("tr");
+                    columns.forEach(column => {
+                        const cell = document.createElement("td");
+                        cell.textContent = column.trim();
+                        row.appendChild(cell);
+                    });
+                    tableBody.appendChild(row);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching or processing data:", error);
+            });
+
+    </script>
+</body>
 </html>
