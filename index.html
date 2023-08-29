@@ -68,8 +68,11 @@
         
         rows.forEach(row => {
           let columns = row.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)$/);
-          
-          if (columns) {
+          if (!columns) {
+            console.error("Failed to parse:", row);
+          } else {
+              // Rest of your processing logic
+              if (columns) {
             tableHTML += `<tr>
               <td>${columns[1]}</td>
               <td>${columns[2]}</td>
@@ -80,6 +83,9 @@
               <td>${columns[7]}</td>
             </tr>`;
           }
+          }
+          
+          
         });
         
         tableHTML += '</table>';
