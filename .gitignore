@@ -1,0 +1,2 @@
+assets/flags/*.png
+!/assets/flags/[A-Z][A-Z][A-Z].png
