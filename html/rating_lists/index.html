@@ -21,6 +21,8 @@
         <option value="Blitz">Blitz</option>
     </select>
 
+    <h2 id="tableTitle">Top 100 Classical</h2>
+
     <div id="data"></div>
 
     <script>
@@ -35,6 +37,15 @@
                 'Sex': true,
                 'Rating': true,
                 'RD': true
+            };
+            const columnDisplayNames = {
+                'Rank': 'Rank',
+                'Name': 'Name',
+                'Federation': 'Federation',
+                'BirthYear': 'Birth Year',
+                'Sex': 'Sex',
+                'Rating': 'Rating',
+                'RD': 'RD'
             };
             let currentSort = {
                 column: null,
@@ -64,6 +75,15 @@
                 resetSortingDefaults();
                 let timeControl = document.getElementById('dataTable2').value;
                 let group = document.getElementById('dataTable1').value;
+                const groupDisplayNames = {
+                    'open.txt': '',
+                    'juniors.txt': 'Juniors',
+                    'women.txt': 'Women',
+                    'girls.txt': 'Girls'
+                };
+                let titleText = `Top 100 ${groupDisplayNames[group]} ${timeControl == 'Standard' ? 'Classical' : timeControl}`;
+                document.getElementById('tableTitle').textContent = titleText;
+                
                 loadTableData(timeControl, group);
             }
 
@@ -86,10 +106,11 @@
             }
 
             function getHeaderWithSortArrow(columnName) {
+                let displayName = columnDisplayNames[columnName]; // Use the display name from the mapping
                 if (currentSort.column === columnName) {
-                    return currentSort.direction === 'asc' ? columnName + ' ↓' : columnName + ' ↑';
+                    return currentSort.direction === 'asc' ? displayName + ' ↓' : displayName + ' ↑';
                 }
-                return columnName;
+                return displayName;
             }
 
     
