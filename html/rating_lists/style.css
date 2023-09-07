@@ -1,14 +1,39 @@
 table {
     border-collapse: collapse;
     width: 100%;
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); /* Subtle shadow */
+    overflow: hidden; /* Ensures the rounded corners for inner elements */
 }
+
 table, th, td {
     border: 1px solid black;
 }
+
 th, td {
     padding: 8px;
     text-align: left;
 }
+
+th {
+    background-color: #f2f2f2; /* Light gray background for headers */
+    font-weight: bold; /* Bold font for headers */
+    font-size: 1.1em; /* Slightly larger font for headers */
+    cursor: pointer; /* Pointer cursor for headers */
+}
+
+th:hover {
+    background-color: #d9d9d9; /* Darker gray background for header hover */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Light gray background for alternate rows */
+}
+
+tr:hover {
+    background-color: #e6e6e6; /* Hover effect */
+}
+
 .back-button {
     display: inline-block;
     margin: 10px;

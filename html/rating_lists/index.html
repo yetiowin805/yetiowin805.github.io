@@ -44,7 +44,24 @@
             document.getElementById('dataTable1').addEventListener('change', loadDataFromDropdowns);
             document.getElementById('dataTable2').addEventListener('change', loadDataFromDropdowns);
 
+            function resetSortingDefaults() {
+                currentSort = {
+                    column: null,
+                    direction: null
+                };
+                sortDirection = {
+                    'Rank': true,
+                    'Name': true,
+                    'Federation': true,
+                    'BirthYear': true,
+                    'Sex': true,
+                    'Rating': true,
+                    'RD': true
+                };
+            }
+
             function loadDataFromDropdowns() {
+                resetSortingDefaults();
                 let timeControl = document.getElementById('dataTable2').value;
                 let group = document.getElementById('dataTable1').value;
                 loadTableData(timeControl, group);
