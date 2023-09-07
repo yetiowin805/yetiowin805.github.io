@@ -8,20 +8,28 @@
 <body>
     <a href="../../../index.html" class="back-button">Back</a>
 
-    <select id="dataTable1">
+    <select id="groupDropdown">
         <option value="open.txt">Open</option>
         <option value="juniors.txt">Juniors</option>
         <option value="women.txt">Women</option>
         <option value="girls.txt">Girls</option>
     </select>
 
-    <select id="dataTable2">
+    <select id="timeControlDropdown">
         <option value="Standard">Classical</option>
         <option value="Rapid">Rapid</option>
         <option value="Blitz">Blitz</option>
     </select>
 
-    <h2 id="tableTitle">Top 100 Classical</h2>
+    <select id="yearDropdown">
+
+    </select>
+
+    <select id="monthDropdown">
+
+    </select>
+
+    <h2 id="tableTitle">Top 100 Classical for September 2023</h2>
 
     <div id="data"></div>
 
@@ -45,15 +53,96 @@
                 'BirthYear': 'Birth Year',
                 'Sex': 'Sex',
                 'Rating': 'Rating',
-                'RD': 'RD'
+                'RD': 'Deviation'
             };
             let currentSort = {
                 column: null,
                 direction: null // 'asc' or 'desc'
             };
 
-            document.getElementById('dataTable1').addEventListener('change', loadDataFromDropdowns);
-            document.getElementById('dataTable2').addEventListener('change', loadDataFromDropdowns);
+            function adjustYearsBasedOnTimeControl(timeControl) {
+                const yearDropdown = document.getElementById('yearDropdown');
+                let currentYear = parseInt(yearDropdown.value); // Store the current year
+
+                yearDropdown.innerHTML = ""; // Clear the current options
+
+                let startYear = 2008;
+                let endYear = 2023;
+
+                if (timeControl === "Rapid" || timeControl === "Blitz") {
+                    startYear = 2012;
+                }
+
+                for (let year = startYear; year <= endYear; year++) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    yearDropdown.appendChild(option);
+                }
+
+                // If the previously selected year is still valid, set it
+                if (currentYear >= startYear && currentYear <= endYear) {
+                    yearDropdown.value = currentYear;
+                } else {
+                    // Set the nearest valid year value
+                    yearDropdown.value = (currentYear < startYear) ? startYear : endYear;
+                }
+            }
+
+            function adjustMonthsBasedOnYear(year) {
+                const monthDropdown = document.getElementById('monthDropdown');
+                let currentMonth = parseInt(monthDropdown.value); // Store the current month
+
+                monthDropdown.innerHTML = ""; // Clear the current options
+
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                
+                let startMonth = 1;
+                let endMonth = 12;
+
+                if(year === 2008) {
+                    startMonth = 11;
+                } else if(year === 2023) {
+                    endMonth = 9; // Only up to September
+                }
+
+                for(let i = startMonth; i <= endMonth; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = monthNames[i - 1];
+                    monthDropdown.appendChild(option);
+                }
+
+                // If the previously selected month is still valid, set it
+                if (currentMonth >= startMonth && currentMonth <= endMonth) {
+                    monthDropdown.value = currentMonth;
+                } else {
+                    // Set the nearest valid month value
+                    monthDropdown.value = (currentMonth < startMonth) ? startMonth : endMonth;
+                }
+            }
+
+            // Event listener for timeControlDropdown change
+            document.getElementById('timeControlDropdown').addEventListener('change', function() {
+                adjustYearsBasedOnTimeControl(this.value);
+                adjustMonthsBasedOnYear(parseInt(yearDropdown.value));
+                loadDataFromDropdowns();
+            });
+
+            
+            // Adjust monthDropdown based on selected year
+            yearDropdown.addEventListener('change', function() {
+                adjustMonthsBasedOnYear(parseInt(yearDropdown.value));
+                loadDataFromDropdowns();
+            });
+
+            adjustYearsBasedOnTimeControl('Standard');
+            adjustMonthsBasedOnYear(2023);
+            document.getElementById('yearDropdown').value = 2023;
+            document.getElementById('monthDropdown').value = 9;
+
+            document.getElementById('groupDropdown').addEventListener('change', loadDataFromDropdowns);
+            document.getElementById('monthDropdown').addEventListener('change', loadDataFromDropdowns);
 
             function resetSortingDefaults() {
                 currentSort = {
@@ -73,34 +162,44 @@
 
             function loadDataFromDropdowns() {
                 resetSortingDefaults();
-                let timeControl = document.getElementById('dataTable2').value;
-                let group = document.getElementById('dataTable1').value;
+
+                // Retrieve values from the dropdowns
+                let timeControl = document.getElementById('timeControlDropdown').value;
+                let group = document.getElementById('groupDropdown').value;
+                let selectedYear = parseInt(document.getElementById('yearDropdown').value);
+                let selectedMonth = parseInt(document.getElementById('monthDropdown').value);
+
                 const groupDisplayNames = {
                     'open.txt': '',
                     'juniors.txt': 'Juniors',
                     'women.txt': 'Women',
                     'girls.txt': 'Girls'
                 };
-                let titleText = `Top 100 ${groupDisplayNames[group]} ${timeControl == 'Standard' ? 'Classical' : timeControl}`;
+
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                let monthWord = monthNames[selectedMonth - 1];  // Convert month number to month name
+
+                let titleText = `Top 100 ${groupDisplayNames[group]} ${timeControl == 'Standard' ? 'Classical' : timeControl} for ${monthWord} ${selectedYear}`;
                 document.getElementById('tableTitle').textContent = titleText;
-                
-                loadTableData(timeControl, group);
+
+                // Pass the selectedYear and selectedMonth to loadTableData
+                loadTableData(timeControl, group, selectedYear, selectedMonth);
             }
 
             function checkWomenGirls() {
-                let selectedValue = document.getElementById('dataTable1').value;
+                let selectedValue = document.getElementById('groupDropdown').value;
                 return (selectedValue === 'women.txt' || selectedValue === 'girls.txt');
             }
 
     
-            async function loadTableData(timeControl="Standard", group="open.txt") {
+            async function loadTableData(timeControl="Standard", group="open.txt", year=2023, month=9) {
                 let baseURL = 'https://raw.githubusercontent.com/yetiowin805/fide-glicko/master/top_rating_lists/';
-                let response = await fetch(baseURL + timeControl + '/' + group);
+                let response = await fetch(baseURL + timeControl + '/' + year + '-' + month.toString().padStart(2, '0') + '/' + group);
                 let data = await response.text();
                 let womenGirls = checkWomenGirls();
                 globalRows = womenGirls ? 
-                data.split('\n').slice(1).filter(row => /^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([\d\.]+)\s+([\d\.]+)$/.test(row)) : 
-                data.split('\n').slice(1).filter(row => /^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)$/.test(row));  // Only keep rows that match the format
+                data.split('\n').slice(1).filter(row => /^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d]+)$/.test(row)) : 
+                data.split('\n').slice(1).filter(row => /^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)\s+([\d]+)$/.test(row));  // Only keep rows that match the format
 
                 displayTable(globalRows);
             }
@@ -132,29 +231,29 @@
 
                 rows.forEach(row => {
                     if (!womenGirls) {
-                        let columns = row.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)$/);
+                        let columns = row.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)\s+([\d]+)$/);
                         if (columns) {
                             tableHTML += `<tr>
                             <td>${columns[1]}</td>
-                            <td>${columns[2]}</td>
+                            <td><a href="http://ratings.fide.com/profile/${columns[8]}" target="_blank" style="color: white;">${columns[2]}</a></td>
                             <td><img src="../../assets/flags/${columns[3]}.png" alt="${columns[3]}" width="30"></td>
                             <td>${columns[4]}</td>
                             <td>${columns[5]}</td>
-                            <td>${columns[6]}</td>
-                            <td>${columns[7]}</td>
+                            <td>${parseFloat(columns[6]).toFixed(2)}</td>
+                            <td>${parseFloat(columns[7]).toFixed(2)}</td>
                             </tr>`;
                         }
                     } else {
                         // Adjusted regex for datasets without 'Sex' column
-                        let columns = row.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([\d\.]+)\s+([\d\.]+)$/);
+                        let columns = row.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d]+)$/);
                         if (columns) {
                             tableHTML += `<tr>
                             <td>${columns[1]}</td>
-                            <td>${columns[2]}</td>
+                            <td><a href="http://ratings.fide.com/profile/${columns[7]}" target="_blank" style="color: white;">${columns[2]}</a></td>
                             <td><img src="../../assets/flags/${columns[3]}.png" alt="${columns[3]}" width="30"></td>
                             <td>${columns[4]}</td>
-                            <td>${columns[5]}</td>
-                            <td>${columns[6]}</td>
+                            <td>${parseFloat(columns[5]).toFixed(2)}</td>
+                            <td>${parseFloat(columns[6]).toFixed(2)}</td>
                             </tr>`;
                         }
                     }
@@ -190,11 +289,11 @@
 
                 rows.sort((a, b) => {
                     let columnsA = womenGirls ? 
-                    a.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([\d\.]+)\s+([\d\.]+)$/) : 
-                    a.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)$/) ;
+                    a.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d]+)$/) : 
+                    a.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)\s+([\d]+)$/) ;
                     let columnsB = womenGirls ? 
-                    b.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([\d\.]+)\s+([\d\.]+)$/) : 
-                    b.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)$/) ;
+                    b.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d]+)$/) : 
+                    b.match(/^(\d+)\s+(.+?)\s+([A-Z]{3})\s+(\d+)\s+([MF])\s+([\d\.]+)\s+([\d\.]+)\s+([\d]+)$/) ;
 
                     let aValue = columnsA[columnIndices[column]];
                     let bValue = columnsB[columnIndices[column]];
