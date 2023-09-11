@@ -23,10 +23,12 @@ table {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Adjusted shadow for dark theme */
     overflow: hidden;
     background-color: #1b2a3a;
+    color: #ffffff;
 }
 
 table, th, td {
     border: 1px solid #2e3f5a;
+    color: #ffffff;
 }
 
 th, td {
