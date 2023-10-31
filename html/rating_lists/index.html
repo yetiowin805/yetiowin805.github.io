@@ -29,7 +29,7 @@
 
     </select>
 
-    <h2 id="tableTitle">Top 100 Classical for October 2023</h2>
+    <h2 id="tableTitle">Top 100 Classical for November 2023</h2>
 
     <div id="data"></div>
 
@@ -103,7 +103,7 @@
                 if(year === 2008) {
                     startMonth = 11;
                 } else if(year === 2023) {
-                    endMonth = 10; // Up to present
+                    endMonth = 11; // Up to present
                 }
 
                 for(let i = startMonth; i <= endMonth; i++) {
@@ -139,7 +139,7 @@
             adjustYearsBasedOnTimeControl('Standard');
             adjustMonthsBasedOnYear(2023);
             document.getElementById('yearDropdown').value = 2023;
-            document.getElementById('monthDropdown').value = 10;
+            document.getElementById('monthDropdown').value = 11;
 
             document.getElementById('groupDropdown').addEventListener('change', loadDataFromDropdowns);
             document.getElementById('monthDropdown').addEventListener('change', loadDataFromDropdowns);
