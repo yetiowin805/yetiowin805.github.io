@@ -29,9 +29,9 @@
 
     </select>
 
-    <select id="fedDropdown">
+    <!-- <select id="fedDropdown">
 
-    </select>
+    </select> -->
 
     <h2 id="tableTitle">Top 100 Classical for January 2024</h2>
 
@@ -126,35 +126,35 @@
                 }
             }
 
-            async function adjustFederations(timeControl, year, month) {
-                const fedDropdown = document.getElementById('fedDropdown');
-                let currentMonth = fedDropdown.value; // Store the current federation
+            // async function adjustFederations(timeControl, year, month) {
+            //     const fedDropdown = document.getElementById('fedDropdown');
+            //     let currentMonth = fedDropdown.value; // Store the current federation
 
-                fedDropdown.innerHTML = ""; // Clear the current options
+            //     fedDropdown.innerHTML = ""; // Clear the current options
 
-                const countryCodes = ['AFG', 'AHO', 'ALB', 'ALG', 'AND', 'ANG', 'ANT', 'ARG', 
-                'ARM', 'ARU', 'AUS', 'AUT', 'AZE', 'BAH', 'BAN', 'BAR', 'BDI', 'BEL', 'BER', 
-                'BHU', 'BIH', 'BLR', 'BOL', 'BOT', 'BRA', 'BRN', 'BRU', 'BUL', 'CAN', 'CAY', 
-                'CHA', 'CHI', 'CHN', 'CIV', 'CMR', 'COL', 'CPV', 'CRC', 'CRO', 'CUB', 'CYP', 
-                'CZE', 'DEN', 'DJI', 'DMA', 'DOM', 'ECU', 'EGY', 'ENG', 'ERI', 'ESA', 'ESP', 
-                'EST', 'ETH', 'FAI', 'FID', 'FIJ', 'FIN', 'FRA', 'GAB', 'GCI', 'GEO', 'GER', 
-                'GHA', 'GRE', 'GUA', 'GUM', 'GUY', 'HAI', 'HKG', 'HON', 'HUN', 'INA', 'IND', 
-                'IOM', 'IRI', 'IRL', 'IRQ', 'ISL', 'ISR', 'ITA', 'JAM', 'JCI', 'JOR', 'JPN', 
-                'KAZ', 'KEN', 'KGZ', 'KOR', 'KOS', 'KSA', 'KUW', 'LAT', 'LBA', 'LBN', 'LBR', 
-                'LCA', 'LES', 'LIB', 'LIE', 'LTU', 'LUX', 'MAC', 'MAD', 'MAR', 'MAS', 'MAW', 
-                'MDA', 'MDV', 'MEX', 'MGL', 'MKD', 'MLT', 'MNC', 'MNE', 'MOZ', 'MRI', 'MTN', 
-                'MYA', 'NAM', 'NCA', 'NED', 'NEP', 'NGR', 'NOR', 'NZL', 'OMA', 'PAK', 'PAN', 
-                'PAR', 'PER', 'PHI', 'PLE', 'PLW', 'PNG', 'POL', 'POR', 'PUR', 'QAT', 'ROU', 
-                'RSA', 'RUS', 'RWA', 'SCO', 'SEN', 'SEY', 'SGP', 'SIN', 'SLE', 'SLO', 'SMR', 
-                'SOM', 'SRB', 'SRI', 'SSD', 'STP', 'SUD', 'SUI', 'SUR', 'SVK', 'SWE', 'SWZ', 
-                'SYR', 'TAN', 'THA', 'TJK', 'TKM', 'TLS', 'TOG', 'TPE', 'TRI', 'TTO', 'TUN', 
-                'TUR', 'UAE', 'UGA', 'UKR', 'URU', 'USA', 'UZB', 'VEN', 'VIE', 'WLS', 'YEM', 
-                'ZAM', 'ZIM'];
+            //     const countryCodes = ['AFG', 'AHO', 'ALB', 'ALG', 'AND', 'ANG', 'ANT', 'ARG', 
+            //     'ARM', 'ARU', 'AUS', 'AUT', 'AZE', 'BAH', 'BAN', 'BAR', 'BDI', 'BEL', 'BER', 
+            //     'BHU', 'BIH', 'BLR', 'BOL', 'BOT', 'BRA', 'BRN', 'BRU', 'BUL', 'CAN', 'CAY', 
+            //     'CHA', 'CHI', 'CHN', 'CIV', 'CMR', 'COL', 'CPV', 'CRC', 'CRO', 'CUB', 'CYP', 
+            //     'CZE', 'DEN', 'DJI', 'DMA', 'DOM', 'ECU', 'EGY', 'ENG', 'ERI', 'ESA', 'ESP', 
+            //     'EST', 'ETH', 'FAI', 'FID', 'FIJ', 'FIN', 'FRA', 'GAB', 'GCI', 'GEO', 'GER', 
+            //     'GHA', 'GRE', 'GUA', 'GUM', 'GUY', 'HAI', 'HKG', 'HON', 'HUN', 'INA', 'IND', 
+            //     'IOM', 'IRI', 'IRL', 'IRQ', 'ISL', 'ISR', 'ITA', 'JAM', 'JCI', 'JOR', 'JPN', 
+            //     'KAZ', 'KEN', 'KGZ', 'KOR', 'KOS', 'KSA', 'KUW', 'LAT', 'LBA', 'LBN', 'LBR', 
+            //     'LCA', 'LES', 'LIB', 'LIE', 'LTU', 'LUX', 'MAC', 'MAD', 'MAR', 'MAS', 'MAW', 
+            //     'MDA', 'MDV', 'MEX', 'MGL', 'MKD', 'MLT', 'MNC', 'MNE', 'MOZ', 'MRI', 'MTN', 
+            //     'MYA', 'NAM', 'NCA', 'NED', 'NEP', 'NGR', 'NOR', 'NZL', 'OMA', 'PAK', 'PAN', 
+            //     'PAR', 'PER', 'PHI', 'PLE', 'PLW', 'PNG', 'POL', 'POR', 'PUR', 'QAT', 'ROU', 
+            //     'RSA', 'RUS', 'RWA', 'SCO', 'SEN', 'SEY', 'SGP', 'SIN', 'SLE', 'SLO', 'SMR', 
+            //     'SOM', 'SRB', 'SRI', 'SSD', 'STP', 'SUD', 'SUI', 'SUR', 'SVK', 'SWE', 'SWZ', 
+            //     'SYR', 'TAN', 'THA', 'TJK', 'TKM', 'TLS', 'TOG', 'TPE', 'TRI', 'TTO', 'TUN', 
+            //     'TUR', 'UAE', 'UGA', 'UKR', 'URU', 'USA', 'UZB', 'VEN', 'VIE', 'WLS', 'YEM', 
+            //     'ZAM', 'ZIM'];
                 
-                let baseURL = 'https://raw.githubusercontent.com/yetiowin805/fide-glicko/master/top_rating_lists/';
-                let response = await fetch(baseURL + timeControl + '/' + year + '-' + month.toString().padStart(2, '0') + '/' + group);
-                let data = await response.text();
-            }
+            //     let baseURL = 'https://raw.githubusercontent.com/yetiowin805/fide-glicko/master/top_rating_lists/';
+            //     let response = await fetch(baseURL + timeControl + '/' + year + '-' + month.toString().padStart(2, '0') + '/' + group);
+            //     let data = await response.text();
+            // }
 
             // Event listener for timeControlDropdown change
             document.getElementById('timeControlDropdown').addEventListener('change', function() {
@@ -171,7 +171,7 @@
             });
 
             adjustYearsBasedOnTimeControl('Standard');
-            adjustMonthsBasedOnYear(2023);
+            adjustMonthsBasedOnYear(2024);
             document.getElementById('yearDropdown').value = 2024;
             document.getElementById('monthDropdown').value = 1;
 
