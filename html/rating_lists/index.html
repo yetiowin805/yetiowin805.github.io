@@ -33,7 +33,7 @@
 
     </select> -->
 
-    <h2 id="tableTitle">Top 100 Classical for November 2024</h2>
+    <h2 id="tableTitle">Top 100 Classical for December 2024</h2>
 
     <div id="data"></div>
 
@@ -107,7 +107,7 @@
                 if(year === 2001) {
                     startMonth = 5;
                 } else if(year === 2024) {
-                    endMonth = 11; // Up to present
+                    endMonth = 12; // Up to present
                 }
 
                 for(let i = startMonth; i <= endMonth; i++) {
@@ -173,7 +173,7 @@
             adjustYearsBasedOnTimeControl('Standard');
             adjustMonthsBasedOnYear(2024);
             document.getElementById('yearDropdown').value = 2024;
-            document.getElementById('monthDropdown').value = 11;
+            document.getElementById('monthDropdown').value = 12;
 
             document.getElementById('groupDropdown').addEventListener('change', loadDataFromDropdowns);
             document.getElementById('monthDropdown').addEventListener('change', loadDataFromDropdowns);
@@ -226,7 +226,7 @@
             }
 
     
-            async function loadTableData(timeControl="Standard", group="open.txt", year=2024, month=11) {
+            async function loadTableData(timeControl="Standard", group="open.txt", year=2024, month=12) {
                 let baseURL = 'https://raw.githubusercontent.com/yetiowin805/fide-glicko/master/top_rating_lists/';
                 let response = await fetch(baseURL + timeControl + '/' + year + '-' + month.toString().padStart(2, '0') + '/' + group);
                 let data = await response.text();
