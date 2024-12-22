@@ -1,15 +1,36 @@
+/* CSS Variables for Theming */
+:root {
+    --background-color: #1e1e1e;
+    --text-color: #ffffff;
+    --header-bg-color: #23344e;
+    --header-hover-bg-color: #2c4565;
+    --table-bg-color: #1b2a3a;
+    --table-border-color: #2e3f5a;
+    --row-hover-bg-color: #253b58;
+    --even-row-bg-color: #182238;
+    --button-bg-color: #23344e;
+    --button-hover-bg-color: #2c4565;
+    --dropdown-bg-color: #23344e;
+    --dropdown-hover-bg-color: #2c4565;
+    --scrollbar-track-color: #23344e;
+    --scrollbar-thumb-color: #2e3f5a;
+}
+
 /* General Styles */
 body {
-    background-color: #1e1e1e;
-    color: #ffffff;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 h2#tableTitle {
     font-size: 2em;
     text-align: center;
-    margin-top: 20px;
-    margin-bottom: 30px;
-    color: #ffffff;
+    margin: 20px 0 30px 0;
+    color: var(--text-color);
     font-weight: bold;
     border-bottom: 2px solid #555;
     padding-bottom: 10px;
@@ -22,79 +43,95 @@ table {
     border-radius: 5px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     overflow: hidden;
-    background-color: #1b2a3a;
-    color: #ffffff;
+    background-color: var(--table-bg-color);
+    color: var(--text-color);
+    transition: transform 0.3s;
+}
+
+table:hover {
+    transform: scale(1.02);
 }
 
 table, th, td {
-    border: 1px solid #2e3f5a;
-    color: #ffffff;
+    border: 1px solid var(--table-border-color);
 }
 
 th, td {
-    padding: 8px;
+    padding: 12px 15px;
     text-align: left;
 }
 
 th {
-    background-color: #23344e;
+    background-color: var(--header-bg-color);
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: 1.2em;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 th:hover {
-    background-color: #2c4565;
+    background-color: var(--header-hover-bg-color);
 }
 
 tr:nth-child(even) {
-    background-color: #182238;
+    background-color: var(--even-row-bg-color);
 }
 
 tr:hover {
-    background-color: #253b58;
+    background-color: var(--row-hover-bg-color);
 }
 
 /* Button Styles */
 .back-button {
     display: inline-block;
-    width: 100px;
-    height: 38px;
-    line-height: 38px;
+    width: 120px;
+    height: 45px;
+    line-height: 45px;
     margin: 10px 10px 10px 0;
     padding: 0;
     text-align: center;
     text-decoration: none;
-    background-color: #23344e;
-    border: 1px solid #2e3f5a;
+    background-color: var(--button-bg-color);
+    border: 1px solid var(--table-border-color);
     color: #eaeaea;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .back-button:hover {
-    background-color: #2c4565;
+    background-color: var(--button-hover-bg-color);
+    transform: translateY(-2px);
+}
+
+.back-button:active {
+    transform: translateY(0);
 }
 
 /* Dropdown Styles */
 select {
-    width: 100px;
-    height: 38px;
-    background-color: #23344e;
-    color: #eaeaea;
-    border: 1px solid #2e3f5a;
-    padding: 0 10px; 
+    width: 150px;
+    height: 45px;
+    background-color: var(--dropdown-bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--table-border-color);
+    padding: 0 15px; 
     font-size: 1em;
     text-align: center;
     border-radius: 5px;
     appearance: none;
     cursor: pointer;
-    margin-right: 10px; 
+    margin-right: 15px; 
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 select:hover {
-    background-color: #2c4565;
+    background-color: var(--dropdown-hover-bg-color);
+    transform: translateY(-2px);
+}
+
+select:active {
+    transform: translateY(0);
 }
 
 select::-ms-expand {
@@ -111,9 +148,27 @@ select::-webkit-scrollbar {
 }
 
 select::-webkit-scrollbar-track {
-    background-color: #23344e;
+    background-color: var(--scrollbar-track-color);
 }
 
 select::-webkit-scrollbar-thumb {
-    background-color: #2e3f5a;
+    background-color: var(--scrollbar-thumb-color);
+    border-radius: 6px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    select, .back-button {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    table, th, td {
+        font-size: 0.9em;
+    }
+
+    h2#tableTitle {
+        font-size: 1.5em;
+    }
 }

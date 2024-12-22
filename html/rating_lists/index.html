@@ -95,11 +95,13 @@
 
             function adjustMonthsBasedOnYear(year) {
                 const monthDropdown = document.getElementById('monthDropdown');
-                let currentMonth = parseInt(monthDropdown.value); // Store the current month
+                const monthNames = [
+                    "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                let currentMonth = parseInt(monthDropdown.value);
 
-                monthDropdown.innerHTML = ""; // Clear the current options
-                
-                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                monthDropdown.innerHTML = ""; // Clear current options
 
                 let startMonth = 1;
                 let endMonth = 12;
@@ -107,7 +109,8 @@
                 if(year === 2001) {
                     startMonth = 5;
                 } else if(year === 2024) {
-                    endMonth = 12; // Up to present
+                    const currentActualMonth = new Date().getMonth() + 1;
+                    endMonth = currentActualMonth;
                 }
 
                 for(let i = startMonth; i <= endMonth; i++) {
@@ -117,11 +120,10 @@
                     monthDropdown.appendChild(option);
                 }
 
-                // If the previously selected month is still valid, set it
+                // Set the current month if still valid
                 if (currentMonth >= startMonth && currentMonth <= endMonth) {
                     monthDropdown.value = currentMonth;
                 } else {
-                    // Set the nearest valid month value
                     monthDropdown.value = (currentMonth < startMonth) ? startMonth : endMonth;
                 }
             }
@@ -352,6 +354,30 @@
                 sortDirection[column] = !sortDirection[column];
                 displayTable(rows);
             }
+
+            // Function to populate monthDropdown and set current month
+            function populateMonths() {
+                const monthDropdown = document.getElementById('monthDropdown');
+                const monthNames = [
+                    "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                const currentMonth = new Date().getMonth(); // 0-indexed
+
+                monthNames.forEach((month, index) => {
+                    const option = document.createElement('option');
+                    option.value = index + 1;
+                    option.textContent = month;
+                    monthDropdown.appendChild(option);
+                });
+
+                // Set the current month as selected
+                monthDropdown.value = currentMonth + 1;
+            }
+
+            // Call populateMonths on page load
+            populateMonths();
+
             loadTableData();
     
         });
