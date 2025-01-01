@@ -108,7 +108,7 @@
 
                 if(year === 2001) {
                     startMonth = 5;
-                } else if(year === 2024) {
+                } else if(year === new Date().getFullYear()) {
                     const currentActualMonth = new Date().getMonth() + 1;
                     endMonth = currentActualMonth;
                 }
@@ -238,7 +238,7 @@
             }
 
     
-            async function loadTableData(timeControl="Standard", group="open.txt", year=2024, month=12) {
+            async function loadTableData(timeControl="Standard", group="open.txt", year=new Date().getFullYear(), month=new Date().getMonth() + 1) {
                 let baseURL = 'https://raw.githubusercontent.com/yetiowin805/fide-glicko/master/data/top_rating_lists/';
                 let response = await fetch(baseURL + timeControl + '/' + year + '-' + month.toString().padStart(2, '0') + '/' + group);
                 let data = await response.text();
