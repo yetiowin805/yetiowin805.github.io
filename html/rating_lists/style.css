@@ -45,11 +45,6 @@ table {
     overflow: hidden;
     background-color: var(--table-bg-color);
     color: var(--text-color);
-    transition: transform 0.3s;
-}
-
-table:hover {
-    transform: scale(1.02);
 }
 
 table, th, td {
@@ -122,16 +117,10 @@ select {
     appearance: none;
     cursor: pointer;
     margin-right: 15px; 
-    transition: background-color 0.3s, transform 0.2s;
 }
 
 select:hover {
     background-color: var(--dropdown-hover-bg-color);
-    transform: translateY(-2px);
-}
-
-select:active {
-    transform: translateY(0);
 }
 
 select::-ms-expand {
