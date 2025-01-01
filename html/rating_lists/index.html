@@ -71,7 +71,7 @@
                 yearDropdown.innerHTML = ""; // Clear the current options
 
                 let startYear = 2001;
-                let endYear = 2024;
+                let endYear = new Date().getFullYear(); // Get current year dynamically
 
                 if (timeControl === "Rapid" || timeControl === "Blitz") {
                     startYear = 2012;
