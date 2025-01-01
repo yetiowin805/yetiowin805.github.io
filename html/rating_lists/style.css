@@ -16,6 +16,12 @@
     --scrollbar-thumb-color: #2e3f5a;
 }
 
+/* Add this at the top of your CSS file, after :root */
+*, *:hover, *:active, *:focus {
+    transform: none !important;
+    zoom: 100% !important;
+}
+
 /* General Styles */
 body {
     background-color: var(--background-color);
